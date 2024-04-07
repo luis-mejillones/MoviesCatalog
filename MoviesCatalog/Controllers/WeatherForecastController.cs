@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using MoviesCatalog.Data;
 
 namespace MoviesCatalog.Controllers
 {
@@ -6,6 +8,8 @@ namespace MoviesCatalog.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
+        private readonly ApplicationDbContext _context;
+
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -13,9 +17,10 @@ namespace MoviesCatalog.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, ApplicationDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
@@ -28,6 +33,14 @@ namespace MoviesCatalog.Controllers
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> Test()
+        {
+            var miniatures = await _context.Miniatures.ToListAsync();
+
+            return Ok(miniatures);
         }
     }
 }
