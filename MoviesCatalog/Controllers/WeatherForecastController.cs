@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MoviesCatalog.Data;
+using MoviesCatalog.Domain;
 
 namespace MoviesCatalog.Controllers
 {
@@ -41,6 +42,15 @@ namespace MoviesCatalog.Controllers
             var miniatures = await _context.Miniatures.ToListAsync();
 
             return Ok(miniatures);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Miniature miniature)
+        {
+            _context.Miniatures.Add(miniature);
+            await _context.SaveChangesAsync();
+
+            return Created(string.Empty, miniature.Id);
         }
     }
 }
