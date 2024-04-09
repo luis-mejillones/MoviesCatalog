@@ -1,12 +1,13 @@
+using System.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MoviesCatalog.Data;
 using MoviesCatalog.Domain;
+using MoviesCatalog.Models;
 
 namespace MoviesCatalog.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
@@ -27,6 +28,7 @@ namespace MoviesCatalog.Controllers
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
+        [Authorize(Roles = "Admin")]
         public IEnumerable<WeatherForecast> Get()
         {
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
