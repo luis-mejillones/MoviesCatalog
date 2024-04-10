@@ -11,7 +11,9 @@ namespace MoviesCatalog.Data
         { 
         }
        
-        public DbSet<Miniature> Miniatures { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<Miniature>? Miniatures { get; set; }
+        public DbSet<User>? Users { get; set; }
+        public DbSet<Movie>? Movies { get; set; }
+        public DbSet<RateMovie>? RateMovies { get; set; }
     }
 }

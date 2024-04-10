@@ -1,6 +1,6 @@
 ﻿namespace MoviesCatalog.Models
 {
-    public enum role
+    public enum Role
     {
         Admin,
         User

@@ -13,6 +13,6 @@ namespace MoviesCatalog.Models
 
         public string Password { get; set; }
 
-        public role Role { get; set; }
+        public Role Role { get; set; }
     }
 }

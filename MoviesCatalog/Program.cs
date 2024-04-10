@@ -12,6 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("localDb")));
 builder.Services.AddScoped<LoginService>();
+builder.Services.AddScoped<MovieService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
