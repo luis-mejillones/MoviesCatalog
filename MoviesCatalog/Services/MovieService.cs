@@ -45,6 +45,11 @@ namespace MoviesCatalog.Services
             _context.SaveChanges();
         }
 
+        public List<Movie> GetAllMovies()
+        {
+            return _context.Movies.OrderBy(m => m.Name).ToList();
+        }
+
         private Movie GetNewMovie(MovieDto movieDto)
         {
             var movie = new Movie()

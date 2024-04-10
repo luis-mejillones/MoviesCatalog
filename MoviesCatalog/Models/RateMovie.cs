@@ -4,8 +4,8 @@
     {
         public int Id { get; set; }
         public RateType Rate { get; set; }
-        public virtual List<Movie>? Movies { get; set;}
-        public virtual List<User>? Users { get; set;}
+        public virtual Movie? Movie { get; set;}
+        public virtual User? User { get; set;}
         
     }
 }

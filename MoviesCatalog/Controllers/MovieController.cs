@@ -49,6 +49,13 @@ namespace MoviesCatalog.Controllers
             return Accepted();
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Admin, User")]
+        public List<Movie> Get()
+        {
+            return _movieService.GetAllMovies();
+        }
+
         private string GetCurrentUserEmail()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
