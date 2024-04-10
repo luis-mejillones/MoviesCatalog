@@ -21,6 +21,7 @@
         Western,
         Biographical,
         Family,
-        Sports
+        Sports,
+        Gangster
     }
 }
