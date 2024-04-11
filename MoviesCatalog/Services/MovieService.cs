@@ -63,34 +63,9 @@ namespace MoviesCatalog.Services
         )
         {
             var movies = from movie in _context.Movies.Include(u => u.User) select movie;
+            movies = SetupSearchCriteria(movies, searchMovieDto, category, release);
 
-            if (!searchMovieDto.Name.IsNullOrEmpty())
-            {
-                movies = movies.Where(m => m.Name.ToLower().Contains(searchMovieDto.Name.ToLower()));
-            }
-            if (!searchMovieDto.Synopsis.IsNullOrEmpty())
-            {
-                movies = movies.Where(m => m.Synopsis.ToLower().Contains(searchMovieDto.Synopsis.ToLower()));
-            }
-            if (category != null && release != null)
-            {
-                movies = movies.Where(m => m.MovieCategory == category && m.ReleaseYear == release);
-            }
-
-            if (sortBy == "year.asc")
-                movies = movies.OrderBy(m => m.ReleaseYear);
-            if (sortBy == "year.desc")
-                movies = movies.OrderByDescending(m => m.ReleaseYear);
-
-            if (sortBy == "name.asc")
-                movies = movies.OrderBy(m => m.Name);
-            if (sortBy == "name.desc")
-                movies = movies.OrderByDescending(m => m.Name);
-            
-            if (sortBy == "date_created.asc")
-                movies = movies.OrderBy(m => m.DateCreated);
-            if (sortBy == "date_created.desc")
-                movies = movies.OrderByDescending(m => m.DateCreated);
+            movies = SetupSort(movies, sortBy);
 
             pageNumber = pageNumber == 0 ? 1 : pageNumber;
             pageSize = pageSize == 0 ? 10 : pageSize;
@@ -106,6 +81,52 @@ namespace MoviesCatalog.Services
         {
             var user = _context.Users.Where(a => a.Email == currentUserEmail).Single();
             return user;
+        }
+
+        private IQueryable<Movie> SetupSearchCriteria(
+            IQueryable<Movie> movies, 
+            SearchMovieDto searchMovieDto, 
+            MovieCategory? category,
+            int? release
+        )
+        {
+            if (!searchMovieDto.Name.IsNullOrEmpty())
+            {
+                movies = movies.Where(m => m.Name.ToLower().Contains(searchMovieDto.Name.ToLower()));
+            }
+            if (!searchMovieDto.Synopsis.IsNullOrEmpty())
+            {
+                movies = movies.Where(m => m.Synopsis.ToLower().Contains(searchMovieDto.Synopsis.ToLower()));
+            }
+            if (category != null && release != null)
+            {
+                movies = movies.Where(m => m.MovieCategory == category && m.ReleaseYear == release);
+            }
+
+            return movies;
+        }
+
+        private IQueryable<Movie> SetupSort(
+            IQueryable<Movie> movies,
+            string? sortBy
+        )
+        {
+            if (sortBy == Constants.SORT_BY_YEAR_ASCENDING)
+                movies = movies.OrderBy(m => m.ReleaseYear);
+            if (sortBy == Constants.SORT_BY_YEAR_DESCENDING)
+                movies = movies.OrderByDescending(m => m.ReleaseYear);
+
+            if (sortBy == Constants.SORT_BY_NAME_ASCENDING)
+                movies = movies.OrderBy(m => m.Name);
+            if (sortBy == Constants.SORT_BY_NAME_DESCENDING)
+                movies = movies.OrderByDescending(m => m.Name);
+
+            if (sortBy == Constants.SORT_BY_DATE_CREATED_ASCENDING)
+                movies = movies.OrderBy(m => m.DateCreated);
+            if (sortBy == Constants.SORT_BY_DATE_CREATED_DESCENDING)
+                movies = movies.OrderByDescending(m => m.DateCreated);
+
+            return movies;
         }
     }
 }
