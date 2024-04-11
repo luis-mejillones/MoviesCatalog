@@ -56,6 +56,18 @@ namespace MoviesCatalog.Controllers
             return _movieService.GetAllMovies();
         }
 
+        [HttpPost("search")]
+        [Authorize(Roles = "Admin, User")]
+        public List<Movie> SearchMovie(
+            SearchMovieDto searchMovieDto, 
+            [FromQuery] MovieCategory? category,
+            [FromQuery] int? release,
+            [FromQuery] string? sort_by
+            )
+        {
+            return _movieService.SearchMovie(searchMovieDto, category, release, sort_by);
+        }
+
         private string GetCurrentUserEmail()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;

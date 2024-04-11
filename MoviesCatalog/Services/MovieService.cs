@@ -1,4 +1,6 @@
-﻿using MoviesCatalog.Data;
+﻿using System.Linq;
+using Microsoft.IdentityModel.Tokens;
+using MoviesCatalog.Data;
 using MoviesCatalog.Models;
 using MoviesCatalog.Models.Dto;
 
@@ -48,6 +50,41 @@ namespace MoviesCatalog.Services
         public List<Movie> GetAllMovies()
         {
             return _context.Movies.OrderBy(m => m.Name).ToList();
+        }
+
+        public List<Movie> SearchMovie(SearchMovieDto searchMovieDto, MovieCategory? category, int? release, string? sortBy)
+        {
+            var movies = from movie in _context.Movies select movie;
+
+            if (!searchMovieDto.Name.IsNullOrEmpty())
+            {
+                movies = movies.Where(m => m.Name.ToLower().Contains(searchMovieDto.Name.ToLower()));
+            }
+            if (!searchMovieDto.Synopsis.IsNullOrEmpty())
+            {
+                movies = movies.Where(m => m.Synopsis.ToLower().Contains(searchMovieDto.Synopsis.ToLower()));
+            }
+            if (category != null && release != null)
+            {
+                movies = movies.Where(m => m.MovieCategory == category && m.ReleaseYear == release);
+            }
+
+            if (sortBy == "year.asc")
+                movies = movies.OrderBy(m => m.ReleaseYear);
+            if (sortBy == "year.desc")
+                movies = movies.OrderByDescending(m => m.ReleaseYear);
+
+            if (sortBy == "name.asc")
+                movies = movies.OrderBy(m => m.Name);
+            if (sortBy == "name.desc")
+                movies = movies.OrderByDescending(m => m.Name);
+            
+            if (sortBy == "date_created.asc")
+                movies = movies.OrderBy(m => m.DateCreated);
+            if (sortBy == "date_created.desc")
+                movies = movies.OrderByDescending(m => m.DateCreated);
+
+            return movies.ToList();
         }
 
         private Movie GetNewMovie(MovieDto movieDto)
