@@ -22,22 +22,32 @@ namespace MoviesCatalog.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<Movie?> Add(MovieDto movieDto)
+        public async Task<ActionResult<Movie>> Add(MovieDto movieDto)
         {
+            if (!movieDto.IsValid())
+            {
+                BadRequest();
+            }
+
             var currentUserEmail = GetCurrentUserEmail();
             var movie = await _movieService.Add(movieDto, currentUserEmail);
 
-            return movie;
+            return new ObjectResult(movie) { StatusCode = StatusCodes.Status201Created };
         }
 
         [HttpPatch("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<Movie?> Update(MovieDto movieDto, int id)
+        public async Task<ActionResult<Movie>> Update(MovieDto movieDto, int id)
         {
+            if (!movieDto.IsValid())
+            {
+                BadRequest();
+            }
+
             var currentUserEmail = GetCurrentUserEmail();
             var movie = await _movieService.Update(id, movieDto, currentUserEmail);
 
-            return movie;
+            return new ObjectResult(movie) { StatusCode = StatusCodes.Status202Accepted };
         }
 
         [HttpDelete("{id}")]

@@ -4,5 +4,5 @@
     {
         public int MovieId { get; set; }
         public RateType Rate { get; set; }
-    }
+        }
 }
