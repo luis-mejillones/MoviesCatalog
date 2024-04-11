@@ -1,7 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MoviesCatalog.Domain;
-using MoviesCatalog.Models;
 using MoviesCatalog.Models.Dto;
 using MoviesCatalog.Services;
 
