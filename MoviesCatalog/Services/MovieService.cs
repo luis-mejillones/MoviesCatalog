@@ -19,7 +19,7 @@ namespace MoviesCatalog.Services
         public async Task<Movie?> Add(MovieDto movieDto, string currentUserEmail)
         {
             var user = GetCurrentUser(currentUserEmail);
-            var movie = GetNewMovie(movieDto);
+            var movie = new Movie().FromDto(movieDto);
             movie.User = user;
 
             _context.Movies.Add(movie);
@@ -31,7 +31,7 @@ namespace MoviesCatalog.Services
         public async Task<Movie?> Update(int id, MovieDto movieDto, string currentUserEmail)
         {
             var movie = _context.Movies.Where(m => m.Id == id).Single();
-            movie = UpdateMovie(movie, movieDto);
+            movie = movie.UpdateFromDto(movieDto);
             var user = GetCurrentUser(currentUserEmail);
             movie.User = user;
 
@@ -100,30 +100,6 @@ namespace MoviesCatalog.Services
             var pagedResponse = new PagedResponse<Movie>(data.ToList(), pageNumber, pageSize, totalRecords);
                 
             return pagedResponse;
-        }
-
-        private Movie GetNewMovie(MovieDto movieDto)
-        {
-            var movie = new Movie()
-            {
-                Name = movieDto.Name,
-                ReleaseYear = movieDto.ReleaseYear,
-                Synopsis = movieDto.Synopsis,
-                MovieCategory = movieDto.MovieCategory,
-                DateCreated = DateTime.Now,
-            };
-
-            return movie;
-        }
-
-        private Movie UpdateMovie(Movie movie, MovieDto movieDto)
-        {
-            movie.Name = movieDto.Name;
-            movie.ReleaseYear = movieDto.ReleaseYear;
-            movie.Synopsis = movieDto.Synopsis;
-            movie.MovieCategory = movieDto.MovieCategory;
-
-            return movie;
         }
 
         private User GetCurrentUser(string currentUserEmail)

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using MoviesCatalog.Models.Dto;
 
 namespace MoviesCatalog.Models
 {
@@ -13,5 +14,29 @@ namespace MoviesCatalog.Models
         public MovieCategory MovieCategory { get; set; }
         public DateTime DateCreated { get; set; }
         public virtual User? User { get; set; }
+
+        public Movie FromDto(MovieDto movieDto)
+        {
+            var movie = new Movie()
+            {
+                Name = movieDto.Name,
+                ReleaseYear = movieDto.ReleaseYear,
+                Synopsis = movieDto.Synopsis,
+                MovieCategory = movieDto.MovieCategory,
+                DateCreated = DateTime.Now,
+            };
+
+            return movie;
+        }
+
+        public Movie UpdateFromDto(MovieDto movieDto)
+        {
+            Name = movieDto.Name;
+            ReleaseYear = movieDto.ReleaseYear;
+            Synopsis = movieDto.Synopsis;
+            MovieCategory = movieDto.MovieCategory;
+
+            return this;
+        }
     }
 }
