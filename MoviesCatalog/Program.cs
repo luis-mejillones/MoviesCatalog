@@ -14,6 +14,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite
 builder.Services.AddScoped<LoginService>();
 builder.Services.AddScoped<MovieService>();
 builder.Services.AddScoped<RatingMovieService>();
+builder.Services.AddScoped<ILoginService>(i => i.GetService<LoginService>());
+builder.Services.AddScoped<IMovieService>(i => i.GetService<MovieService>());
+builder.Services.AddScoped<IRatingMovieService>(i => i.GetService<RatingMovieService>());
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {

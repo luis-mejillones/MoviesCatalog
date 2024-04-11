@@ -12,9 +12,9 @@ namespace MoviesCatalog.Controllers
     [Route("api/rating_movie")]
     public class RatingMovieController : Controller
     {
-        private readonly RatingMovieService _ratingService;
+        private readonly IRatingMovieService _ratingService;
 
-        public RatingMovieController(RatingMovieService ratingService)
+        public RatingMovieController(IRatingMovieService ratingService)
         {
             _ratingService = ratingService;
         }

@@ -10,7 +10,7 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace MoviesCatalog.Services
 {
-    public class LoginService
+    public class LoginService: ILoginService
     {
         private readonly ApplicationDbContext _context;
         private IConfiguration _configuration;

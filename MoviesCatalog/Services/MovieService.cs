@@ -7,7 +7,7 @@ using MoviesCatalog.Services.Helpers;
 
 namespace MoviesCatalog.Services
 {
-    public class MovieService
+    public class MovieService: IMovieService
     {
         private readonly ApplicationDbContext _context;
 

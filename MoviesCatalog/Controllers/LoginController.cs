@@ -8,8 +8,8 @@ namespace MoviesCatalog.Controllers
     [Route("api/[controller]")]
     public class LoginController: ControllerBase
     {
-        private readonly LoginService _loginService;
-        public LoginController(LoginService loginService)
+        private readonly ILoginService _loginService;
+        public LoginController(ILoginService loginService)
         {
             _loginService = loginService;
         }
@@ -28,13 +28,5 @@ namespace MoviesCatalog.Controllers
 
             return Ok(new { token = jwtToken });
         }
-
-        //[HttpPost("create")]
-        //public async Task<IActionResult> Create(User user)
-        //{
-        //    await _loginService.Create(user);
-
-        //    return Created(string.Empty, user.Id);
-        //}
     }
 }

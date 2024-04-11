@@ -12,9 +12,9 @@ namespace MoviesCatalog.Controllers
     [Route("api/movie")]
     public class MovieController : Controller
     {
-        private readonly MovieService _movieService;
+        private readonly IMovieService _movieService;
 
-        public MovieController(MovieService movieService)
+        public MovieController(IMovieService movieService)
         {
             _movieService = movieService;
             
