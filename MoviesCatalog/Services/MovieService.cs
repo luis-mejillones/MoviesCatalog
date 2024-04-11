@@ -1,8 +1,9 @@
-﻿using System.Linq;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MoviesCatalog.Data;
 using MoviesCatalog.Models;
 using MoviesCatalog.Models.Dto;
+using MoviesCatalog.Services.Helpers;
 
 namespace MoviesCatalog.Services
 {
@@ -49,12 +50,19 @@ namespace MoviesCatalog.Services
 
         public List<Movie> GetAllMovies()
         {
-            return _context.Movies.OrderBy(m => m.Name).ToList();
+            return _context.Movies.Include(u => u.User).OrderBy(m => m.Name).ToList();
         }
 
-        public List<Movie> SearchMovie(SearchMovieDto searchMovieDto, MovieCategory? category, int? release, string? sortBy)
+        public PagedResponse<Movie> SearchMovie(
+            SearchMovieDto searchMovieDto, 
+            MovieCategory? category, 
+            int? release, 
+            string? sortBy,
+            int? pageNumber,
+            int? pageSize
+        )
         {
-            var movies = from movie in _context.Movies select movie;
+            var movies = from movie in _context.Movies.Include(u => u.User) select movie;
 
             if (!searchMovieDto.Name.IsNullOrEmpty())
             {
@@ -84,7 +92,14 @@ namespace MoviesCatalog.Services
             if (sortBy == "date_created.desc")
                 movies = movies.OrderByDescending(m => m.DateCreated);
 
-            return movies.ToList();
+            pageNumber = pageNumber == 0 ? 1 : pageNumber;
+            pageSize = pageSize == 0 ? 10 : pageSize;
+
+            var totalRecords = movies.Count();
+            var data = movies.Skip((int)((pageNumber - 1) * pageSize)).Take((int)pageSize);
+            var pagedResponse = new PagedResponse<Movie>(data.ToList(), pageNumber, pageSize, totalRecords);
+                
+            return pagedResponse;
         }
 
         private Movie GetNewMovie(MovieDto movieDto)

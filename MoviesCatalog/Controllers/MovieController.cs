@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MoviesCatalog.Models;
 using MoviesCatalog.Models.Dto;
 using MoviesCatalog.Services;
+using MoviesCatalog.Services.Helpers;
 
 namespace MoviesCatalog.Controllers
 {
@@ -58,14 +59,23 @@ namespace MoviesCatalog.Controllers
 
         [HttpPost("search")]
         [Authorize(Roles = "Admin, User")]
-        public List<Movie> SearchMovie(
+        public PagedResponse<Movie> SearchMovie(
             SearchMovieDto searchMovieDto, 
             [FromQuery] MovieCategory? category,
             [FromQuery] int? release,
-            [FromQuery] string? sort_by
+            [FromQuery] string? sort_by,
+            [FromQuery] int? page_number = 1,
+            [FromQuery] int? page_size = 10
             )
         {
-            return _movieService.SearchMovie(searchMovieDto, category, release, sort_by);
+            return _movieService.SearchMovie(
+                searchMovieDto, 
+                category, 
+                release, 
+                sort_by, 
+                page_number, 
+                page_size
+            );
         }
 
         private string GetCurrentUserEmail()
