@@ -5,11 +5,11 @@ using MoviesCatalog.Models.Dto;
 
 namespace MoviesCatalog.Services
 {
-    public class RatingService
+    public class RatingMovieService
     {
         private readonly ApplicationDbContext _context;
 
-        public RatingService(ApplicationDbContext context)
+        public RatingMovieService(ApplicationDbContext context)
         {
             _context = context;
         }
